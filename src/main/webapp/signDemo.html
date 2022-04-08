@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        支付下单Demo
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>
+        .a {
+            width: 450px;
+            height: 20px;
+            margin: 1px 6px 0 16px;
+            padding-left: 10px;
+        }
+
+        input:focus {
+            border-style: solid;
+            border-color: #339933
+        }
+
+        #payFormDiv {
+            width: 700px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div id="payFormDiv">
+    <form id="createOrderForm" method="post">
+        <p id="payFormDivHead">
+            <label>
+                报文头 head ↓↓↓↓↓↓↓↓↓↓↓↓↓
+            </label>
+            <br/>
+            版本号
+            <input class="a" type="text" name="version" id="version" value="1.0"/>
+            <br/>
+            接口名称
+            <input class="a" type="text" name="method" id="method" value="sandPay.fastPay.quickPay.index"
+            />
+            <br/>
+            产品编号
+            <select class="a" name="productId" id="productId">
+                <option value="00000016">
+                    00000016-一键快捷产品
+                </option>
+            </select>
+            <br/>
+            接入类型
+            <select class="a" name="accessType" id="accessType">
+                <option value="1">
+                    1-普通商户接入
+                </option>
+                <option value="2">
+                    2-平台商户接入
+                </option>
+            </select>
+            <br/>
+            平台商户号
+            <input class="a" type="text" name="plMid" id="plMid" value=""
+            />
+            <br/>
+            商户号
+            <input class="a" type="text" name="mid" id="mid" value="17246250"/>
+            <br/>
+            渠道类型
+            <select class="a" name="channelType" id="channelType">
+                <option value="07">
+                    07-互联网
+                </option>
+            </select>
+            <br/>
+            请求时间
+            <input class="a" type="text" name="reqTime" id="reqTime" value=""
+            />
+            <br/>
+        </p>
+        <p id="payFormDivBody">
+            <label>
+                报文体 body ↓↓↓↓↓↓↓↓↓↓↓↓↓
+            </label>
+            <br/>
+            用户号
+            <input class="a" type="text" name="userId" id="userId" value="test001"
+            />
+            <br/>
+            商户订单号
+            <input class="a" type="text" name="orderCode" id="orderCode" value=""/>
+            <br/>
+            商户订单时间
+            <input class="a" type="text" name="orderTime" id="orderTime" value=""/>
+            <br/>
+            订单金额
+            <input class="a" type="text" name="totalAmount" id="totalAmount" value="000000000012"/>
+            <br/>
+            订单标题
+            <input class="a" type="text" name="subject" id="subject" value="test01Title"/>
+            <br/>
+            订单描述
+            <input class="a" type="text" name="body" id="body" value="test01Desc"/>
+            <br/>
+            币种
+            <input class="a" type="text" name="currencyCode" id="currencyCode" value="156"/>
+            <br/>
+            异步通知地址
+            <input class="a" type="text" name="notifyUrl" id="notifyUrl" value="http://www.baidu.com"
+            />
+            <br/>
+            前端通知地址
+            <input class="a" type="text" name="frontUrl" id="frontUrl" value="http://www.baidu.com"
+            />
+            <br/>
+            清算模式
+            <select class="a" name="clearCycle" id="clearCycle">
+                <option value="0">
+                    	0：T1 (默认)
+                </option>
+                <option value="1">
+                    	1：T0
+                </option>
+                <option value="2">
+                    	2：D0
+                </option>
+            </select>
+            <br/>
+            扩展域
+            <input class="a" type="text" name="extend" id="extend" value="kzy"/>
+            <br/>
+        </p>
+    </form>
+    <form id="payForm" method="post">
+        <p>
+            <label>
+                报文签名 ↓↓↓↓↓↓↓↓↓↓↓↓↓
+            </label>
+            <br/>
+            编码方式
+            <input class="a" type="text" name="charset" id="charset" value="UTF-8"
+            />
+            <br/>
+            交易报文
+            <input class="a" type="text" name="data" id="data" value=""/>
+            <br/>
+            签名类型
+            <input class="a" type="text" name="signType" id="signType" value="01"
+            />
+            <br/>
+            签名
+            <input class="a" type="text" name="sign" id="sign" value=""/>
+            <br/>
+            扩展域
+            <input class="a" type="text" name="extend" id="extend" value="kzy"/>
+            <br/>
+            <input type="button" value="去签名" id="button_sign" onclick="javascript:forSign()"
+            />
+            <input type="button" value="去下单" id="button_createOrder" onclick="javascript:forCreateOrder()"
+            />
+            &nbsp;
+        </p>
+    </form>
+    杉德支付请求地址
+    <select class="a" name="reqUrl" id="reqUrl" onchange="this.parentNode.nextSibling.value=this.value">
+        <option value="https://cashier.sandpay.com.cn/fastPay/quickPay/index">
+            https://cashier.sandpay.com.cn/fastPay/quickPay/index
+        </option>
+    </select>
+    <br/>
+</div>
+<script type="text/javascript" src="jquery-1.7.2.min.js">
+</script>
+<script>
+    function CurentTime() {
+        var now = new Date();
+        var year = now.getFullYear(); //年
+        var month = now.getMonth() + 1; //月
+        var day = now.getDate(); //日
+
+        var hh = now.getHours(); //时
+        var mm = now.getMinutes(); //分
+        var ss = now.getSeconds(); //获取当前秒数(0-59)
+        var clock = year + "";
+
+        if (month < 10) clock += "0";
+
+        clock += month;
+
+        if (day < 10) clock += "0";
+
+        clock += day;
+
+        if (hh < 10) clock += "0";
+
+        clock += hh;
+        if (mm < 10) clock += "0";
+        clock += mm;
+        if (ss < 10) clock += "0";
+        clock += ss;
+        return (clock);
+    }
+
+    $(function () {
+        var current = CurentTime();
+        $("#reqTime").val(current);
+        $("#orderTime").val(current);
+        $("#orderCode").val("D" + current);
+    });
+
+    function forSign() {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: '/sandpay-fastpay-demo/getSign',
+            data: $('#createOrderForm').serialize(),
+            // 你的formid
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (r) {
+                $("#data").val($.parseJSON(r).data);
+                $("#sign").val($.parseJSON(r).sign);
+            }
+        });
+    }
+
+    function forCreateOrder() {
+        $("#payForm").attr("action", $('#reqUrl').val());
+        $("#payForm").submit();
+    }
+</script>
+</body>
+
+</html>

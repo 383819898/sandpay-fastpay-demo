@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/sandpay-agentreceive-demo.iml" filepath="$PROJECT_DIR$/sandpay-agentreceive-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sandpay-directpay-demo.iml" filepath="$PROJECT_DIR$/sandpay-directpay-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sandpay-fastpay-demo.iml" filepath="$PROJECT_DIR$/sandpay-fastpay-demo.iml" />
+    </modules>
+  </component>
+</project>

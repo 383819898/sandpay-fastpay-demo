@@ -1,0 +1,22 @@
+-以下为demo具体结构详情
+-main
+    -java
+        -...demo
+            -FastPayApiUtil // API相关工具类
+            -FastPayServlet // 签约获取签名后端服务类
+        -...resources
+            -MID_RSA_PRIVATE_KEY_100211701160001_new.pfx // 商户私钥
+            -sand_merch_public_key.cer // 商户公钥
+            -sand.cer // 杉德公钥
+            -sandPayConfig.properties // 配置文件相关
+        -...webapp
+            -WEB-INF
+                -web.xml // web项目初始配置，初始化签约servlet
+            -jquery-1.7.2.min.js // jquery库
+            -signDemo.html // 签约发起demo页
+-test
+    -java
+        -...FastPayClearFileTest // 对账单
+        -...FastPayQueryOrderTest // 订单查询
+        -...FastPayRefundPayTest // 退货
+
